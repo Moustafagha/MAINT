@@ -1,0 +1,149 @@
+{
+  "api_endpoints": {
+    "total_endpoints": 9,
+    "endpoints": [
+      {
+        "route": "/users",
+        "methods": [
+          "GET"
+        ],
+        "line": 6,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/user.py"
+      },
+      {
+        "route": "/users",
+        "methods": [
+          "POST"
+        ],
+        "line": 11,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/user.py"
+      },
+      {
+        "route": "/users/<int:user_id>",
+        "methods": [
+          "GET"
+        ],
+        "line": 20,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/user.py"
+      },
+      {
+        "route": "/users/<int:user_id>",
+        "methods": [
+          "PUT"
+        ],
+        "line": 25,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/user.py"
+      },
+      {
+        "route": "/users/<int:user_id>",
+        "methods": [
+          "DELETE"
+        ],
+        "line": 34,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/user.py"
+      },
+      {
+        "route": "/sensor-data",
+        "methods": [
+          "GET"
+        ],
+        "line": 53,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/predict.py"
+      },
+      {
+        "route": "/predict",
+        "methods": [
+          "POST"
+        ],
+        "line": 92,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/predict.py"
+      },
+      {
+        "route": "/historical-data",
+        "methods": [
+          "GET"
+        ],
+        "line": 137,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/predict.py"
+      },
+      {
+        "route": "/machine-status",
+        "methods": [
+          "GET"
+        ],
+        "line": 159,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/predict.py"
+      }
+    ],
+    "supported_methods": [
+      "DELETE",
+      "POST",
+      "PUT",
+      "GET"
+    ],
+    "response_formats": [
+      "JSON"
+    ]
+  },
+  "ml_capabilities": {
+    "total_models": 1,
+    "models": [
+      {
+        "name": "PredictiveMaintenanceModel",
+        "line": 9,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/models/ml_model.py"
+      }
+    ],
+    "prediction_functions": [
+      {
+        "name": "train_model",
+        "line": 47,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/models/ml_model.py"
+      },
+      {
+        "name": "predict_failure_probability",
+        "line": 76,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/models/ml_model.py"
+      },
+      {
+        "name": "save_model",
+        "line": 108,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/models/ml_model.py"
+      },
+      {
+        "name": "load_model",
+        "line": 121,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/models/ml_model.py"
+      },
+      {
+        "name": "predict_failure",
+        "line": 93,
+        "file": "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/routes/predict.py"
+      }
+    ],
+    "algorithms_used": [
+      "sklearn.RandomForest (Line 3)"
+    ],
+    "data_features": 11
+  },
+  "prediction_system": {
+    "github_predictions": [
+      {
+        "endpoint": "/predict",
+        "methods": [
+          "POST"
+        ],
+        "description": "Prediction API at /predict"
+      }
+    ],
+    "data_sources": [
+      "GitHub commit data"
+    ],
+    "prediction_types": [],
+    "api_integration": []
+  },
+  "integration_flow": [
+    "Frontend \u2192 API Endpoints \u2192 ML Models \u2192 Predictions",
+    "GitHub Data \u2192 ML Processing \u2192 Dashboard Visualization"
+  ]
+}

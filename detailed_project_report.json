@@ -1,0 +1,146 @@
+{
+  "project_name": "Predictive Dashboard for GitHub",
+  "architecture": "Full-Stack Web Application with ML",
+  "components": {
+    "backend": {
+      "technology": "Flask (Python)",
+      "files_analyzed": 1,
+      "functionality": {
+        "routes": [
+          "/",
+          "/<path:path>"
+        ],
+        "functions": [
+          "serve"
+        ],
+        "imports": [
+          "import os",
+          "import sys",
+          "from flask import Flask, send_from_directory",
+          "from flask_cors import CORS",
+          "from src.models.user import db",
+          "from src.routes.user import user_bp",
+          "from src.routes.predict import predict_bp"
+        ],
+        "database_models": [],
+        "api_endpoints": [
+          {
+            "route": "/",
+            "line": 28,
+            "methods": "GET"
+          },
+          {
+            "route": "/<path:path>",
+            "line": 29,
+            "methods": "GET"
+          }
+        ]
+      }
+    },
+    "frontend": {
+      "technology": "React (JavaScript)",
+      "files_analyzed": 1,
+      "functionality": {
+        "components": [
+          "App",
+          "fetchMachineStatus",
+          "fetchHistoricalData",
+          "formattedData",
+          "fetchData",
+          "getStatusInfo"
+        ],
+        "hooks": [
+          "import { useState, useEffect } from 'react'",
+          "import { useState, useEffect } from 'react'",
+          "const [machineData, setMachineData] = useState(null)",
+          "const [historicalData, setHistoricalData] = useState([])",
+          "const [loading, setLoading] = useState(true)",
+          "const [error, setError] = useState(null)",
+          "useEffect(() => {"
+        ],
+        "imports": [
+          "import { useState, useEffect } from 'react'",
+          "import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'",
+          "import { Badge } from '@/components/ui/badge'",
+          "import { AlertCircle, Activity, Thermometer, Zap, Gauge } from 'lucide-react'",
+          "import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'",
+          "import './App.css'"
+        ],
+        "api_calls": [
+          "const response = await fetch(`${API_BASE_URL}/machine-status`)",
+          "const response = await fetch(`${API_BASE_URL}/historical-data?limit=20`)"
+        ],
+        "state_variables": [
+          "machineData",
+          "historicalData",
+          "loading",
+          "error"
+        ]
+      }
+    },
+    "ml_models": {
+      "technology": "Python ML Libraries",
+      "files_analyzed": 2,
+      "functionality": {
+        "models": [
+          "PredictiveMaintenanceModel (Line 9)"
+        ],
+        "algorithms": [
+          "numpy (Line 1)",
+          "pandas (Line 2)",
+          "sklearn (Line 3)",
+          "sklearn (Line 4)",
+          "sklearn (Line 5)"
+        ],
+        "data_processing": [
+          "Line 5: from sklearn.preprocessing import StandardScaler",
+          "Line 37: # Create DataFrame",
+          "Line 38: data = pd.DataFrame({",
+          "Line 1: from flask import Blueprint, request, jsonify",
+          "Line 81: return jsonify({",
+          "Line 87: return jsonify({",
+          "Line 96: data = request.get_json()",
+          "Line 99: return jsonify({",
+          "Line 113: return jsonify({",
+          "Line 127: return jsonify({",
+          "Line 132: return jsonify({",
+          "Line 147: return jsonify({",
+          "Line 154: return jsonify({",
+          "Line 183: return jsonify({",
+          "Line 201: return jsonify({"
+        ],
+        "prediction_functions": [
+          "train_model (Line 47)",
+          "predict_failure_probability (Line 76)",
+          "save_model (Line 108)",
+          "load_model (Line 121)",
+          "predict_failure (Line 93)"
+        ],
+        "imports": [
+          "import numpy as np",
+          "import pandas as pd",
+          "from sklearn.ensemble import RandomForestClassifier",
+          "from sklearn.model_selection import train_test_split",
+          "from sklearn.preprocessing import StandardScaler",
+          "import joblib",
+          "import os",
+          "from flask import Blueprint, request, jsonify",
+          "import random",
+          "import time",
+          "import os",
+          "from src.models.ml_model import PredictiveMaintenanceModel"
+        ]
+      }
+    }
+  },
+  "key_features": [
+    "API Endpoints: /, /<path:path>",
+    "React Components: formattedData, fetchData, getStatusInfo, fetchHistoricalData, App, fetchMachineStatus",
+    "ML Predictions: 5 functions"
+  ],
+  "data_flow": [
+    "Frontend \u2192 API \u2192 Backend",
+    "Backend \u2192 ML Models \u2192 Predictions"
+  ],
+  "setup_requirements": []
+}

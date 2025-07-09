@@ -1,0 +1,124 @@
+{
+  "documentation": {
+    "home/ubuntu/predictive-dashboard/predictive-dashboard/README.md": {
+      "size": 6274,
+      "content": "# Predictive Failure Monitor Dashboard\n\nA complete AI-powered dashboard that predicts machine failures based on real-time sensor data using machine learning.\n\n## \ud83d\udd25 Features\n\n- **Real-time Machine Status**: Healthy / At Risk / Failure indicators\n- **Live Sensor Readings**: Temperature, Vibration, Pressure monitoring\n- **AI-Powered Predictions**: Failure probability (0-100%) using Random Forest ML model\n- **Smart Alert System**: Green (Normal), Yellow (Warning), Red (Critical)\n- **Historical Trends**: Interactive line charts showing sensor data over time\n- **Auto-refresh**: Dashboard updates every 5 seconds\n- **Responsive Design**: Works on desktop, tablet, and mobile devices\n\n## \ud83c\udfd7\ufe0f Architecture\n\n### Backend (Flask + ML)\n- **Framework**: Flask with CORS enabled\n- **ML Model**: Random Forest Classifier with synthetic training data\n- **API Endpoints**:\n  - `/api/machine-status` - Current machine status and sensor readings\n  - `/api/sensor-data` - Real-time sensor data with predictions\n  - `/api/predict` - Manual prediction endpoint\n  - `/api/historical-data` - Historical sensor data for charts\n\n### Frontend (React)\n- **Framework**: React with Vite\n- **UI Components**: shadcn/ui with Tailwind CSS\n- **Charts**: Recharts for historical data visualization\n- **Icons**: Lucide React icons\n- **Auto-refresh**: Updates every 5 seconds\n\n## \ud83d\udce6 Project Structure\n\n```\npredictive-dashboard/\n\u251c\u2500\u2500 predictive-backend/          # Flask backend with ML model\n\u2502   \u251c\u2500\u2500 src/\n\u2502   \u2502   \u251c\u2500\u2500 models/\n\u2502   \u2502   \u2502   \u251c\u2500\u2500 ml_model.py     # ML model implementation\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 trained_model.pkl # Trained model file\n\u2502   \u2502   \u251c\u2500\u2500 routes/\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 predict.py      # API endpoints\n\u2502   \u2502   \u251c\u2500\u2500 static/             # Built frontend files\n\u2502   \u2502   \u2514\u2500\u2500 main.py             # Flask app entry point\n\u2502   \u251c\u2500\u2500 venv/                   # Python virtual environment\n\u2502   \u2514\u2500\u2500 requirements.txt        # Python dependencies\n\u251c\u2500\u2500 predictive-frontend/         # React frontend\n\u2502   \u251c\u2500\u2500 src/\n\u2502   \u2502   \u251c\u2500\u2500 components/         # UI co..."
+    },
+    "home/ubuntu/predictive-dashboard/predictive-dashboard/DEPLOYMENT.md": {
+      "size": 2251,
+      "content": "# Predictive Failure Monitor - Deployment Guide\n\n## \ud83d\ude80 Deploy to Render (Recommended)\n\n### Method 1: Using render.yaml (Automatic)\n\n1. **Push to GitHub**:\n   ```bash\n   git init\n   git add .\n   git commit -m \"Initial commit: Predictive Failure Monitor\"\n   git branch -M main\n   git remote add origin https://github.com/yourusername/predictive-dashboard.git\n   git push -u origin main\n   ```\n\n2. **Deploy on Render**:\n   - Go to [Render Dashboard](https://dashboard.render.com)\n   - Click \"New\" \u2192 \"Blueprint\"\n   - Connect your GitHub repository\n   - Render will automatically detect `render.yaml` and deploy\n\n### Method 2: Manual Web Service\n\n1. **Create New Web Service** on Render\n2. **Connect GitHub Repository**\n3. **Configure Settings**:\n   - **Build Command**: `cd predictive-backend && pip install -r requirements.txt`\n   - **Start Command**: `cd predictive-backend && python src/main.py`\n   - **Environment**: Python 3.11\n   - **Plan**: Free\n\n## \ud83c\udf10 Alternative Deployment Options\n\n### Railway\n1. Connect GitHub repository\n2. Set build command: `cd predictive-backend && pip install -r requirements.txt`\n3. Set start command: `cd predictive-backend && python src/main.py`\n\n### Heroku\n1. Create `Procfile` in root:\n   ```\n   web: cd predictive-backend && python src/main.py\n   ```\n2. Deploy via Heroku CLI or GitHub integration\n\n### DigitalOcean App Platform\n1. Create new app from GitHub\n2. Configure Python component with above build/start commands\n\n## \ud83d\udd27 Environment Variables\n\nNo environment variables are required for basic deployment. The app works out of the box!\n\nOptional variables:\n- `PORT`: Server port (default: 5000)\n- `FLASK_ENV`: Set to 'production' for production deployment\n\n## \ud83d\udcdd Post-Deployment\n\nAfter deployment, your dashboard will be available at your service URL. The ML model will automatically train on first startup (takes ~10 seconds).\n\n## \ud83d\udc1b Troubleshooting Deployment\n\n### Common Issues:\n1. **Build Fails**: Ensure `requirements.txt` is up to date\n2. **App Won't Start**:..."
+    }
+  },
+  "configuration": {
+    "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/requirements.txt": {
+      "size": 377,
+      "content": "blinker==1.9.0\nclick==8.2.1\nFlask==3.1.1\nflask-cors==6.0.0\nFlask-SQLAlchemy==3.1.1\ngreenlet==3.2.3\nitsdangerous==2.2.0\nJinja2==3.1.6\njoblib==1.5.1\nMarkupSafe==3.0.2\nnumpy==2.3.1\npandas==2.3.0\npython-dateutil==2.9.0.post0\npytz==2025.2\nscikit-learn==1.7.0\nscipy==1.16.0\nsix==1.17.0\nSQLAlchemy==2.0.41\nthreadpoolctl==3.6.0\ntyping_extensions==4.14.0\ntzdata==2025.2\nWerkzeug==3.1.3\n"
+    },
+    "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-backend/src/main.py": {
+      "size": 1535,
+      "content": "import os\nimport sys\n# DON'T CHANGE THIS !!!\nsys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))\n\nfrom flask import Flask, send_from_directory\nfrom flask_cors import CORS\nfrom src.models.user import db\nfrom src.routes.user import user_bp\nfrom src.routes.predict import predict_bp\n\napp = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))\napp.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'\n\n# Enable CORS for all routes\nCORS(app)\n\napp.register_blueprint(user_bp, url_prefix='/api')\napp.register_blueprint(predict_bp, url_prefix='/api')\n\n# uncomment if you need to use database\napp.config['SQLALCHEMY_DATABASE_URI'] = f\"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}\"\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb.init_app(app)\nwith app.app_context():\n    db.create_all()\n\n@app.route('/', defaults={'path': ''})\n@app.route('/<path:path>')\ndef serve(path):\n    static_folder_path = app.static_folder\n    if static_folder_path is None:\n            return \"Static folder not configured\", 404\n\n    if path != \"\" and os.path.exists(os.path.join(static_folder_path, path)):\n        return send_from_directory(static_folder_path, path)\n    else:\n        index_path = os.path.join(static_folder_path, 'index.html')\n        if os.path.exists(index_path):\n            return send_from_directory(static_folder_path, 'index.html')\n        else:\n            return \"index.html not found\", 404\n\n\nif __name__ == '__main__':\n    app.run(host='0.0.0.0', port=5000, debug=True)\n"
+    },
+    "home/ubuntu/predictive-dashboard/predictive-dashboard/predictive-frontend/package.json": {
+      "size": 2577,
+      "content": "{\n  \"name\": \"predictive-frontend\",\n  \"private\": true,\n  \"version\": \"0.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"vite build\",\n    \"lint\": \"eslint .\",\n    \"preview\": \"vite preview\"\n  },\n  \"dependencies\": {\n    \"@hookform/resolvers\": \"^5.0.1\",\n    \"@radix-ui/react-accordion\": \"^1.2.10\",\n    \"@radix-ui/react-alert-dialog\": \"^1.1.13\",\n    \"@radix-ui/react-aspect-ratio\": \"^1.1.6\",\n    \"@radix-ui/react-avatar\": \"^1.1.9\",\n    \"@radix-ui/react-checkbox\": \"^1.3.1\",\n    \"@radix-ui/react-collapsible\": \"^1.1.10\",\n    \"@radix-ui/react-context-menu\": \"^2.2.14\",\n    \"@radix-ui/react-dialog\": \"^1.1.13\",\n    \"@radix-ui/react-dropdown-menu\": \"^2.1.14\",\n    \"@radix-ui/react-hover-card\": \"^1.1.13\",\n    \"@radix-ui/react-label\": \"^2.1.6\",\n    \"@radix-ui/react-menubar\": \"^1.1.14\",\n    \"@radix-ui/react-navigation-menu\": \"^1.2.12\",\n    \"@radix-ui/react-popover\": \"^1.1.13\",\n    \"@radix-ui/react-progress\": \"^1.1.6\",\n    \"@radix-ui/react-radio-group\": \"^1.3.6\",\n    \"@radix-ui/react-scroll-area\": \"^1.2.8\",\n    \"@radix-ui/react-select\": \"^2.2.4\",\n    \"@radix-ui/react-separator\": \"^1.1.6\",\n    \"@radix-ui/react-slider\": \"^1.3.4\",\n    \"@radix-ui/react-slot\": \"^1.2.2\",\n    \"@radix-ui/react-switch\": \"^1.2.4\",\n    \"@radix-ui/react-tabs\": \"^1.1.11\",\n    \"@radix-ui/react-toggle\": \"^1.1.8\",\n    \"@radix-ui/react-toggle-group\": \"^1.1.9\",\n    \"@radix-ui/react-tooltip\": \"^1.2.6\",\n    \"@tailwindcss/vite\": \"^4.1.7\",\n    \"class-variance-authority\": \"^0.7.1\",\n    \"clsx\": \"^2.1.1\",\n    \"cmdk\": \"^1.1.1\",\n    \"date-fns\": \"^4.1.0\",\n    \"embla-carousel-react\": \"^8.6.0\",\n    \"framer-motion\": \"^12.15.0\",\n    \"input-otp\": \"^1.4.2\",\n    \"lucide-react\": \"^0.510.0\",\n    \"next-themes\": \"^0.4.6\",\n    \"react\": \"^19.1.0\",\n    \"react-day-picker\": \"8.10.1\",\n    \"react-dom\": \"^19.1.0\",\n    \"react-hook-form\": \"^7.56.3\",\n    \"react-resizable-panels\": \"^3.0.2\",\n    \"react-router-dom\": \"^7.6.1\",\n    \"recharts\": \"^2.15.3\",\n    \"sonner\": \"^2.0.3\",\n    \"tailwind-merge\": \"^3.3.0\",\n    \"tailwindcss\": \"^4.1.7\",\n    \"vaul\": \"^1.1.2\",\n    \"zod\": \"^3.24.4\"\n  },\n  \"devDependencies\": {\n    \"@eslint/js\": \"^9.25.0\",\n    \"@types/react\": \"^19.1.2\",\n    \"@types/react-dom\": \"^19.1.2\",\n    \"@vitejs/plugin-react\": \"^4.4.1\",\n    \"eslint\": \"^9.25.0\",\n    \"eslint-plugin-react-hooks\": \"^5.2.0\",\n    \"eslint-plugin-react-refresh\": \"^0.4.19\",\n    \"globals\": \"^16.0.0\",\n    \"tw-animate-css\": \"^1.2.9\",\n    \"vite\": \"^6.3.5\"\n  },\n  \"packageManager\": \"pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af\"\n}\n"
+    }
+  },
+  "project_overview": {},
+  "technology_stack": {
+    "python_requirements": [
+      "blinker==1.9.0",
+      "click==8.2.1",
+      "Flask==3.1.1",
+      "flask-cors==6.0.0",
+      "Flask-SQLAlchemy==3.1.1",
+      "greenlet==3.2.3",
+      "itsdangerous==2.2.0",
+      "Jinja2==3.1.6",
+      "joblib==1.5.1",
+      "MarkupSafe==3.0.2",
+      "numpy==2.3.1",
+      "pandas==2.3.0",
+      "python-dateutil==2.9.0.post0",
+      "pytz==2025.2",
+      "scikit-learn==1.7.0",
+      "scipy==1.16.0",
+      "six==1.17.0",
+      "SQLAlchemy==2.0.41",
+      "threadpoolctl==3.6.0",
+      "typing_extensions==4.14.0",
+      "tzdata==2025.2",
+      "Werkzeug==3.1.3"
+    ],
+    "frontend_dependencies": {
+      "@hookform/resolvers": "^5.0.1",
+      "@radix-ui/react-accordion": "^1.2.10",
+      "@radix-ui/react-alert-dialog": "^1.1.13",
+      "@radix-ui/react-aspect-ratio": "^1.1.6",
+      "@radix-ui/react-avatar": "^1.1.9",
+      "@radix-ui/react-checkbox": "^1.3.1",
+      "@radix-ui/react-collapsible": "^1.1.10",
+      "@radix-ui/react-context-menu": "^2.2.14",
+      "@radix-ui/react-dialog": "^1.1.13",
+      "@radix-ui/react-dropdown-menu": "^2.1.14",
+      "@radix-ui/react-hover-card": "^1.1.13",
+      "@radix-ui/react-label": "^2.1.6",
+      "@radix-ui/react-menubar": "^1.1.14",
+      "@radix-ui/react-navigation-menu": "^1.2.12",
+      "@radix-ui/react-popover": "^1.1.13",
+      "@radix-ui/react-progress": "^1.1.6",
+      "@radix-ui/react-radio-group": "^1.3.6",
+      "@radix-ui/react-scroll-area": "^1.2.8",
+      "@radix-ui/react-select": "^2.2.4",
+      "@radix-ui/react-separator": "^1.1.6",
+      "@radix-ui/react-slider": "^1.3.4",
+      "@radix-ui/react-slot": "^1.2.2",
+      "@radix-ui/react-switch": "^1.2.4",
+      "@radix-ui/react-tabs": "^1.1.11",
+      "@radix-ui/react-toggle": "^1.1.8",
+      "@radix-ui/react-toggle-group": "^1.1.9",
+      "@radix-ui/react-tooltip": "^1.2.6",
+      "@tailwindcss/vite": "^4.1.7",
+      "class-variance-authority": "^0.7.1",
+      "clsx": "^2.1.1",
+      "cmdk": "^1.1.1",
+      "date-fns": "^4.1.0",
+      "embla-carousel-react": "^8.6.0",
+      "framer-motion": "^12.15.0",
+      "input-otp": "^1.4.2",
+      "lucide-react": "^0.510.0",
+      "next-themes": "^0.4.6",
+      "react": "^19.1.0",
+      "react-day-picker": "8.10.1",
+      "react-dom": "^19.1.0",
+      "react-hook-form": "^7.56.3",
+      "react-resizable-panels": "^3.0.2",
+      "react-router-dom": "^7.6.1",
+      "recharts": "^2.15.3",
+      "sonner": "^2.0.3",
+      "tailwind-merge": "^3.3.0",
+      "tailwindcss": "^4.1.7",
+      "vaul": "^1.1.2",
+      "zod": "^3.24.4"
+    },
+    "frontend_dev_dependencies": {
+      "@eslint/js": "^9.25.0",
+      "@types/react": "^19.1.2",
+      "@types/react-dom": "^19.1.2",
+      "@vitejs/plugin-react": "^4.4.1",
+      "eslint": "^9.25.0",
+      "eslint-plugin-react-hooks": "^5.2.0",
+      "eslint-plugin-react-refresh": "^0.4.19",
+      "globals": "^16.0.0",
+      "tw-animate-css": "^1.2.9",
+      "vite": "^6.3.5"
+    }
+  },
+  "setup_instructions": {
+    "npm_scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "lint": "eslint .",
+      "preview": "vite preview"
+    }
+  }
+}
