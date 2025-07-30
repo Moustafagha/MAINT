@@ -1,203 +1,189 @@
-# Predictive Failure Monitor Dashboard
+# Predictive Failure Monitor - AI Dashboard
 
-A complete AI-powered dashboard that predicts machine failures based on real-time sensor data using machine learning.
+A real-time machine health monitoring dashboard with AI-powered failure predictions. This React application provides a comprehensive view of machine sensor data and predictive analytics.
 
-## 🔥 Features
+## Features
 
-- **Real-time Machine Status**: Healthy / At Risk / Failure indicators
-- **Live Sensor Readings**: Temperature, Vibration, Pressure monitoring
-- **AI-Powered Predictions**: Failure probability (0-100%) using Random Forest ML model
-- **Smart Alert System**: Green (Normal), Yellow (Warning), Red (Critical)
-- **Historical Trends**: Interactive line charts showing sensor data over time
-- **Auto-refresh**: Dashboard updates every 5 seconds
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Real-time Monitoring**: Live sensor data display (temperature, vibration, pressure)
+- **AI-Powered Predictions**: Machine learning-based failure probability assessment
+- **Historical Trends**: Interactive charts showing sensor data over time
+- **Alert System**: Visual indicators for different alert levels (normal, warning, critical)
+- **Auto-refresh**: Data updates every 5 seconds
+- **Responsive Design**: Works on desktop and mobile devices
 
-## 🏗️ Architecture
+## Tech Stack
 
-### Backend (Flask + ML)
-- **Framework**: Flask with CORS enabled
-- **ML Model**: Random Forest Classifier with synthetic training data
-- **API Endpoints**:
-  - `/api/machine-status` - Current machine status and sensor readings
-  - `/api/sensor-data` - Real-time sensor data with predictions
-  - `/api/predict` - Manual prediction endpoint
-  - `/api/historical-data` - Historical sensor data for charts
+- **Frontend**: React 19, Vite
+- **UI Components**: Radix UI, Tailwind CSS
+- **Charts**: Recharts
+- **Icons**: Lucide React
+- **Styling**: Tailwind CSS with custom design system
 
-### Frontend (React)
-- **Framework**: React with Vite
-- **UI Components**: shadcn/ui with Tailwind CSS
-- **Charts**: Recharts for historical data visualization
-- **Icons**: Lucide React icons
-- **Auto-refresh**: Updates every 5 seconds
-
-## 📦 Project Structure
+## Project Structure
 
 ```
-predictive-dashboard/
-├── predictive-backend/          # Flask backend with ML model
-│   ├── src/
-│   │   ├── models/
-│   │   │   ├── ml_model.py     # ML model implementation
-│   │   │   └── trained_model.pkl # Trained model file
-│   │   ├── routes/
-│   │   │   └── predict.py      # API endpoints
-│   │   ├── static/             # Built frontend files
-│   │   └── main.py             # Flask app entry point
-│   ├── venv/                   # Python virtual environment
-│   └── requirements.txt        # Python dependencies
-├── predictive-frontend/         # React frontend
-│   ├── src/
-│   │   ├── components/         # UI components
-│   │   ├── App.jsx            # Main dashboard component
-│   │   └── App.css            # Styles
-│   ├── dist/                  # Built files
-│   └── package.json           # Node dependencies
-└── README.md                  # This file
+├── src/
+│   ├── components/ui/     # UI components (Card, Badge, etc.)
+│   ├── lib/              # Utility functions
+│   ├── App.jsx           # Main application component
+│   ├── main.jsx          # Application entry point
+│   └── index.css         # Global styles and Tailwind imports
+├── public/               # Static assets
+├── package.json          # Dependencies and scripts
+├── vite.config.js        # Vite configuration
+├── tailwind.config.js    # Tailwind CSS configuration
+└── vercel.json          # Vercel deployment configuration
 ```
 
-## 🚀 Quick Start
+## Getting Started
 
-### Local Development
+### Prerequisites
 
-1. **Backend Setup**:
-   ```bash
-   cd predictive-backend
-   source venv/bin/activate
-   pip install -r requirements.txt
-   python src/main.py
-   ```
-   Backend will run on `http://localhost:5000`
+- Node.js 18+ 
+- npm or pnpm
 
-2. **Frontend Development** (optional, for development):
-   ```bash
-   cd predictive-frontend
-   pnpm install
-   pnpm run dev
-   ```
-   Frontend dev server will run on `http://localhost:5173`
+### Installation
 
-3. **Full-Stack (Recommended)**:
-   Just run the backend - it serves the frontend from `/src/static/`
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd predictive-frontend
+```
 
-### 🌐 Deployment Options
+2. Install dependencies:
+```bash
+npm install --legacy-peer-deps
+```
 
-#### Option 1: Deploy Backend Only (Recommended)
-The backend serves the built frontend, so you only need to deploy one service:
+3. Start the development server:
+```bash
+npm run dev
+```
 
-1. **Render/Railway/Heroku**:
-   - Connect to your GitHub repository
-   - Set build command: `cd predictive-backend && pip install -r requirements.txt`
-   - Set start command: `cd predictive-backend && python src/main.py`
-   - Set port: `5000`
+4. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-#### Option 2: Separate Frontend/Backend
-1. **Backend**: Deploy Flask app as above
-2. **Frontend**: Deploy React app to Vercel/Netlify
-   - Build command: `cd predictive-frontend && pnpm run build`
-   - Publish directory: `predictive-frontend/dist`
-   - Set environment variable: `REACT_APP_API_URL=your-backend-url`
+### Building for Production
 
-## 🧠 ML Model Details
+```bash
+npm run build
+```
 
-- **Algorithm**: Random Forest Classifier
-- **Features**: Temperature, Vibration, Pressure
-- **Training Data**: 1000 synthetic samples (500 normal, 500 failure conditions)
-- **Accuracy**: ~99.5% on test data
-- **Output**: Failure probability (0-100%)
+The built files will be in the `dist/` directory.
 
-### Status Thresholds:
-- **Healthy**: < 30% failure probability (Green)
-- **At Risk**: 30-70% failure probability (Yellow)  
-- **Failure**: > 70% failure probability (Red)
+## Deployment
 
-## 🔧 API Documentation
+### Deploy to Vercel
 
-### GET /api/machine-status
-Returns current machine status and sensor readings.
+1. Install Vercel CLI:
+```bash
+npm i -g vercel
+```
 
-**Response**:
+2. Deploy to Vercel:
+```bash
+vercel
+```
+
+Or connect your GitHub repository to Vercel for automatic deployments.
+
+### Environment Variables
+
+The application uses the following environment variables:
+
+- `NODE_ENV`: Set to 'production' for deployment
+- API endpoints are automatically configured based on the environment
+
+### API Configuration
+
+The application expects a backend API with the following endpoints:
+
+- `GET /api/machine-status` - Current machine status and sensor data
+- `GET /api/historical-data?limit=20` - Historical sensor data
+
+## API Response Format
+
+### Machine Status Endpoint
+
 ```json
 {
   "success": true,
   "data": {
-    "machine_id": "MACHINE-001",
-    "machine_name": "Production Line A",
-    "current_status": "Healthy",
+    "machine_id": "MACHINE_001",
+    "machine_name": "Production Line 1",
+    "current_status": "operational",
     "alert_level": "normal",
-    "failure_probability": 15.2,
+    "failure_probability": 15.5,
     "sensor_readings": {
-      "temperature": 72.5,
-      "vibration": 0.18,
-      "pressure": 14.8
-    }
+      "temperature": 65.2,
+      "vibration": 0.15,
+      "pressure": 120.5
+    },
+    "last_updated": 1640995200
   }
 }
 ```
 
-### GET /api/historical-data?limit=50
-Returns historical sensor data and predictions.
+### Historical Data Endpoint
 
-### POST /api/predict
-Manual prediction endpoint.
-
-**Request**:
 ```json
 {
-  "temperature": 85.0,
-  "vibration": 0.6,
-  "pressure": 12.0
+  "success": true,
+  "data": [
+    {
+      "temperature": 65.2,
+      "vibration": 0.15,
+      "pressure": 120.5,
+      "failure_probability": 15.5,
+      "timestamp": 1640995200
+    }
+  ]
 }
 ```
 
-## 🛠️ Customization
+## Development
 
-### Adding New Sensors
-1. Update `ml_model.py` to include new features
-2. Retrain the model with new data
-3. Update API endpoints in `predict.py`
-4. Add new sensor cards in React frontend
+### Available Scripts
 
-### Changing Alert Thresholds
-Modify the thresholds in `ml_model.py`:
-```python
-def get_machine_status(self, failure_probability):
-    if failure_probability < 30:  # Change this
-        return "Healthy"
-    elif failure_probability < 70:  # And this
-        return "At Risk"
-    else:
-        return "Failure"
-```
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-## 📊 Sample Data
+### Code Structure
 
-The ML model generates realistic synthetic data:
-- **Normal Operation**: Temp ~70°C, Vibration ~0.2 m/s², Pressure ~15 psi
-- **Failure Conditions**: Temp ~90°C, Vibration ~0.8 m/s², Pressure ~8 psi
+The application follows a component-based architecture:
 
-## 🐛 Troubleshooting
+- **App.jsx**: Main application component with state management
+- **UI Components**: Reusable components in `src/components/ui/`
+- **Utils**: Helper functions in `src/lib/utils.js`
 
-### Common Issues:
-1. **CORS Errors**: Ensure Flask-CORS is installed and configured
-2. **Model Not Found**: The model trains automatically on first run
-3. **Port Conflicts**: Change port in `main.py` if 5000 is occupied
-4. **Build Errors**: Ensure all dependencies are installed
+## Troubleshooting
 
-### Development Tips:
-- Use browser dev tools to monitor API calls
-- Check Flask console for ML model training logs
-- Frontend auto-refreshes every 5 seconds - watch network tab
+### Common Issues
 
-## 📝 License
+1. **Build Errors**: Ensure all dependencies are installed with `--legacy-peer-deps`
+2. **API Connection**: Check that the backend API is running and accessible
+3. **Styling Issues**: Verify Tailwind CSS is properly configured
 
-MIT License - feel free to use this project as a starting point for your own predictive maintenance solutions!
+### Performance Optimization
 
-## 🚀 Next Steps
+- The application uses React 19 with automatic batching
+- Charts are optimized with Recharts
+- CSS is purged in production builds
 
-- Connect to real sensor hardware (IoT devices, PLCs)
-- Add user authentication and multi-machine support
-- Implement email/SMS alerts for critical conditions
-- Add more sophisticated ML models (LSTM for time series)
-- Create mobile app version
-- Add data export functionality
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For support and questions, please open an issue in the repository.
 
