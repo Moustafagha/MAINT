@@ -1,73 +1,116 @@
-# Predictive Failure Monitor - Deployment Guide
+# Vercel Deployment Guide
 
-## 🚀 Deploy to Render (Recommended)
+## Quick Deploy to Vercel
 
-### Method 1: Using render.yaml (Automatic)
+### Option 1: Deploy with Vercel CLI
 
-1. **Push to GitHub**:
+1. **Install Vercel CLI**:
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: Predictive Failure Monitor"
-   git branch -M main
-   git remote add origin https://github.com/yourusername/predictive-dashboard.git
-   git push -u origin main
+   npm i -g vercel
    ```
 
-2. **Deploy on Render**:
-   - Go to [Render Dashboard](https://dashboard.render.com)
-   - Click "New" → "Blueprint"
-   - Connect your GitHub repository
-   - Render will automatically detect `render.yaml` and deploy
-
-### Method 2: Manual Web Service
-
-1. **Create New Web Service** on Render
-2. **Connect GitHub Repository**
-3. **Configure Settings**:
-   - **Build Command**: `cd predictive-backend && pip install -r requirements.txt`
-   - **Start Command**: `cd predictive-backend && python src/main.py`
-   - **Environment**: Python 3.11
-   - **Plan**: Free
-
-## 🌐 Alternative Deployment Options
-
-### Railway
-1. Connect GitHub repository
-2. Set build command: `cd predictive-backend && pip install -r requirements.txt`
-3. Set start command: `cd predictive-backend && python src/main.py`
-
-### Heroku
-1. Create `Procfile` in root:
+2. **Login to Vercel**:
+   ```bash
+   vercel login
    ```
-   web: cd predictive-backend && python src/main.py
+
+3. **Deploy**:
+   ```bash
+   vercel
    ```
-2. Deploy via Heroku CLI or GitHub integration
 
-### DigitalOcean App Platform
-1. Create new app from GitHub
-2. Configure Python component with above build/start commands
+4. **Follow the prompts**:
+   - Link to existing project or create new
+   - Confirm deployment settings
+   - Wait for build to complete
 
-## 🔧 Environment Variables
+### Option 2: Deploy via GitHub
 
-No environment variables are required for basic deployment. The app works out of the box!
+1. **Push your code to GitHub**
 
-Optional variables:
-- `PORT`: Server port (default: 5000)
-- `FLASK_ENV`: Set to 'production' for production deployment
+2. **Connect to Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Vercel will auto-detect Vite settings
 
-## 📝 Post-Deployment
+3. **Deploy**:
+   - Click "Deploy"
+   - Vercel will build and deploy automatically
 
-After deployment, your dashboard will be available at your service URL. The ML model will automatically train on first startup (takes ~10 seconds).
+## Build Configuration
 
-## 🐛 Troubleshooting Deployment
+The project is configured for Vercel with:
 
-### Common Issues:
-1. **Build Fails**: Ensure `requirements.txt` is up to date
-2. **App Won't Start**: Check that Flask app listens on `0.0.0.0`
-3. **Static Files Not Found**: Ensure frontend is built and copied to `src/static/`
+- **Framework**: Vite
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Node Version**: 18.x (auto-detected)
 
-### Logs to Check:
-- Build logs for dependency installation issues
-- Runtime logs for Flask startup and ML model training
+## Environment Variables
+
+No environment variables are required for basic deployment. The app automatically detects production vs development mode.
+
+## API Configuration
+
+The app expects a backend API. For production:
+
+1. **Deploy your backend** to a service like:
+   - Railway
+   - Render
+   - Heroku
+   - DigitalOcean
+
+2. **Update API URL** in the frontend if needed:
+   - Edit `src/App.jsx` line 8
+   - Change the API_BASE_URL for production
+
+## Troubleshooting
+
+### Build Errors
+
+1. **Dependency Issues**:
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+2. **Node Version**:
+   - Ensure Node.js 18+ is used
+   - Vercel auto-detects this
+
+### Runtime Errors
+
+1. **API Connection**:
+   - Check browser console for CORS errors
+   - Ensure backend is deployed and accessible
+
+2. **Component Errors**:
+   - Verify all imports are correct
+   - Check that all UI components exist
+
+## Custom Domain
+
+1. **Add Domain in Vercel Dashboard**
+2. **Configure DNS** as instructed
+3. **SSL Certificate** is auto-provisioned
+
+## Monitoring
+
+- **Vercel Analytics**: Available in dashboard
+- **Function Logs**: Check Vercel dashboard for errors
+- **Performance**: Built-in performance monitoring
+
+## Updates
+
+To update your deployment:
+
+1. **Push changes to GitHub**
+2. **Vercel auto-deploys** on push to main branch
+3. **Preview deployments** for pull requests
+
+## Support
+
+- **Vercel Documentation**: [vercel.com/docs](https://vercel.com/docs)
+- **Vite Documentation**: [vitejs.dev](https://vitejs.dev)
+- **React Documentation**: [react.dev](https://react.dev)
 

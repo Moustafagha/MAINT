@@ -1,203 +1,133 @@
-# Predictive Failure Monitor Dashboard
+# Predictive Failure Monitor - AI Dashboard
 
-A complete AI-powered dashboard that predicts machine failures based on real-time sensor data using machine learning.
+A real-time machine health monitoring dashboard with AI-powered failure prediction capabilities.
 
-## 🔥 Features
+## Features
 
-- **Real-time Machine Status**: Healthy / At Risk / Failure indicators
-- **Live Sensor Readings**: Temperature, Vibration, Pressure monitoring
-- **AI-Powered Predictions**: Failure probability (0-100%) using Random Forest ML model
-- **Smart Alert System**: Green (Normal), Yellow (Warning), Red (Critical)
-- **Historical Trends**: Interactive line charts showing sensor data over time
-- **Auto-refresh**: Dashboard updates every 5 seconds
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Real-time Monitoring**: Live sensor data display (temperature, vibration, pressure)
+- **AI Predictions**: Machine learning-based failure probability assessment
+- **Historical Trends**: Interactive charts showing sensor data over time
+- **Alert System**: Visual indicators for normal, warning, and critical states
+- **Auto-refresh**: Data updates every 5 seconds automatically
 
-## 🏗️ Architecture
+## Tech Stack
 
-### Backend (Flask + ML)
-- **Framework**: Flask with CORS enabled
-- **ML Model**: Random Forest Classifier with synthetic training data
-- **API Endpoints**:
-  - `/api/machine-status` - Current machine status and sensor readings
-  - `/api/sensor-data` - Real-time sensor data with predictions
-  - `/api/predict` - Manual prediction endpoint
-  - `/api/historical-data` - Historical sensor data for charts
+- **Frontend**: React 18 + Vite
+- **UI Components**: Radix UI + Tailwind CSS
+- **Charts**: Recharts
+- **Icons**: Lucide React
+- **Deployment**: Vercel
 
-### Frontend (React)
-- **Framework**: React with Vite
-- **UI Components**: shadcn/ui with Tailwind CSS
-- **Charts**: Recharts for historical data visualization
-- **Icons**: Lucide React icons
-- **Auto-refresh**: Updates every 5 seconds
-
-## 📦 Project Structure
+## Project Structure
 
 ```
-predictive-dashboard/
-├── predictive-backend/          # Flask backend with ML model
-│   ├── src/
-│   │   ├── models/
-│   │   │   ├── ml_model.py     # ML model implementation
-│   │   │   └── trained_model.pkl # Trained model file
-│   │   ├── routes/
-│   │   │   └── predict.py      # API endpoints
-│   │   ├── static/             # Built frontend files
-│   │   └── main.py             # Flask app entry point
-│   ├── venv/                   # Python virtual environment
-│   └── requirements.txt        # Python dependencies
-├── predictive-frontend/         # React frontend
-│   ├── src/
-│   │   ├── components/         # UI components
-│   │   ├── App.jsx            # Main dashboard component
-│   │   └── App.css            # Styles
-│   ├── dist/                  # Built files
-│   └── package.json           # Node dependencies
-└── README.md                  # This file
+├── src/
+│   ├── components/ui/     # UI components (Card, Badge, etc.)
+│   ├── lib/              # Utility functions
+│   ├── App.jsx           # Main application component
+│   ├── main.jsx          # Application entry point
+│   ├── App.css           # Application styles
+│   └── index.css         # Global styles
+├── public/               # Static assets
+├── index.html            # HTML template
+├── package.json          # Dependencies and scripts
+├── vite.config.js        # Vite configuration
+└── vercel.json          # Vercel deployment config
 ```
 
-## 🚀 Quick Start
+## Local Development
 
-### Local Development
-
-1. **Backend Setup**:
+1. **Install dependencies**:
    ```bash
-   cd predictive-backend
-   source venv/bin/activate
-   pip install -r requirements.txt
-   python src/main.py
+   npm install
    ```
-   Backend will run on `http://localhost:5000`
 
-2. **Frontend Development** (optional, for development):
+2. **Start development server**:
    ```bash
-   cd predictive-frontend
-   pnpm install
-   pnpm run dev
+   npm run dev
    ```
-   Frontend dev server will run on `http://localhost:5173`
 
-3. **Full-Stack (Recommended)**:
-   Just run the backend - it serves the frontend from `/src/static/`
+3. **Build for production**:
+   ```bash
+   npm run build
+   ```
 
-### 🌐 Deployment Options
+## Deployment to Vercel
 
-#### Option 1: Deploy Backend Only (Recommended)
-The backend serves the built frontend, so you only need to deploy one service:
+### Automatic Deployment
 
-1. **Render/Railway/Heroku**:
-   - Connect to your GitHub repository
-   - Set build command: `cd predictive-backend && pip install -r requirements.txt`
-   - Set start command: `cd predictive-backend && python src/main.py`
-   - Set port: `5000`
+1. Connect your GitHub repository to Vercel
+2. Vercel will automatically detect the Vite framework
+3. The build settings are configured in `vercel.json`
 
-#### Option 2: Separate Frontend/Backend
-1. **Backend**: Deploy Flask app as above
-2. **Frontend**: Deploy React app to Vercel/Netlify
-   - Build command: `cd predictive-frontend && pnpm run build`
-   - Publish directory: `predictive-frontend/dist`
-   - Set environment variable: `REACT_APP_API_URL=your-backend-url`
+### Manual Deployment
 
-## 🧠 ML Model Details
+1. **Install Vercel CLI**:
+   ```bash
+   npm i -g vercel
+   ```
 
-- **Algorithm**: Random Forest Classifier
-- **Features**: Temperature, Vibration, Pressure
-- **Training Data**: 1000 synthetic samples (500 normal, 500 failure conditions)
-- **Accuracy**: ~99.5% on test data
-- **Output**: Failure probability (0-100%)
+2. **Deploy**:
+   ```bash
+   vercel
+   ```
 
-### Status Thresholds:
-- **Healthy**: < 30% failure probability (Green)
-- **At Risk**: 30-70% failure probability (Yellow)  
-- **Failure**: > 70% failure probability (Red)
+### Environment Variables
 
-## 🔧 API Documentation
+The application uses the following environment variables:
 
-### GET /api/machine-status
-Returns current machine status and sensor readings.
+- `NODE_ENV`: Set to 'production' for deployment
+- API endpoints are automatically configured for both development and production
 
-**Response**:
+## API Integration
+
+The dashboard expects a backend API with the following endpoints:
+
+- `GET /api/machine-status` - Current machine status and sensor readings
+- `GET /api/historical-data?limit=20` - Historical sensor data
+
+### Expected API Response Format
+
 ```json
 {
   "success": true,
   "data": {
-    "machine_id": "MACHINE-001",
+    "machine_id": "MACHINE_001",
     "machine_name": "Production Line A",
-    "current_status": "Healthy",
+    "current_status": "operational",
     "alert_level": "normal",
-    "failure_probability": 15.2,
     "sensor_readings": {
-      "temperature": 72.5,
-      "vibration": 0.18,
-      "pressure": 14.8
-    }
+      "temperature": 45.2,
+      "vibration": 0.15,
+      "pressure": 120.5
+    },
+    "failure_probability": 12.5,
+    "last_updated": 1640995200
   }
 }
 ```
 
-### GET /api/historical-data?limit=50
-Returns historical sensor data and predictions.
+## Troubleshooting
 
-### POST /api/predict
-Manual prediction endpoint.
+### Common Issues
 
-**Request**:
-```json
-{
-  "temperature": 85.0,
-  "vibration": 0.6,
-  "pressure": 12.0
-}
-```
+1. **Build Errors**: Ensure all dependencies are installed with `npm install`
+2. **API Connection**: Check that the backend API is running and accessible
+3. **Component Errors**: Verify that all UI components are properly imported
 
-## 🛠️ Customization
+### Development vs Production
 
-### Adding New Sensors
-1. Update `ml_model.py` to include new features
-2. Retrain the model with new data
-3. Update API endpoints in `predict.py`
-4. Add new sensor cards in React frontend
+- **Development**: API calls go to `http://localhost:5000/api`
+- **Production**: API calls go to `/api` (relative path)
 
-### Changing Alert Thresholds
-Modify the thresholds in `ml_model.py`:
-```python
-def get_machine_status(self, failure_probability):
-    if failure_probability < 30:  # Change this
-        return "Healthy"
-    elif failure_probability < 70:  # And this
-        return "At Risk"
-    else:
-        return "Failure"
-```
+## Contributing
 
-## 📊 Sample Data
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-The ML model generates realistic synthetic data:
-- **Normal Operation**: Temp ~70°C, Vibration ~0.2 m/s², Pressure ~15 psi
-- **Failure Conditions**: Temp ~90°C, Vibration ~0.8 m/s², Pressure ~8 psi
+## License
 
-## 🐛 Troubleshooting
-
-### Common Issues:
-1. **CORS Errors**: Ensure Flask-CORS is installed and configured
-2. **Model Not Found**: The model trains automatically on first run
-3. **Port Conflicts**: Change port in `main.py` if 5000 is occupied
-4. **Build Errors**: Ensure all dependencies are installed
-
-### Development Tips:
-- Use browser dev tools to monitor API calls
-- Check Flask console for ML model training logs
-- Frontend auto-refreshes every 5 seconds - watch network tab
-
-## 📝 License
-
-MIT License - feel free to use this project as a starting point for your own predictive maintenance solutions!
-
-## 🚀 Next Steps
-
-- Connect to real sensor hardware (IoT devices, PLCs)
-- Add user authentication and multi-machine support
-- Implement email/SMS alerts for critical conditions
-- Add more sophisticated ML models (LSTM for time series)
-- Create mobile app version
-- Add data export functionality
+MIT License - see LICENSE file for details
 
